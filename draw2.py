@@ -5,12 +5,15 @@
 import math, random, string, time, os, csv
 
 TIME_MULTIPLE = 0.1
+DEBUGGING_TIME_MULTIPLE = 100
+
 PLAYERS_PER_GROUP = 3
 FIRST_DIVISION_GROUPS = 3
 PLAYERS_IN_FIRST_DIVISION = PLAYERS_PER_GROUP * FIRST_DIVISION_GROUPS
 DIVISIONS = 2
 PROMOTED_PLAYERS = 3
 SEEDS = PLAYERS_PER_GROUP
+PLAYERS_IN_PROMOTION_PLAYOFF = 6
 
 class Participant():
     def __repr__(self):
@@ -79,8 +82,6 @@ for i, p in enumerate(participants):
             else:
                 same_ranking.append([p, participants[i - 1]])
 
-time.sleep(TIME_MULTIPLE * 10)
-
 if len(same_ranking) > 0:
     os.system("clear")
     print()
@@ -137,7 +138,7 @@ seeds_for_promotion_playoff = [[], [], []]
 for g in range(int(len(participants_in_divisions[1]) / PLAYERS_PER_GROUP)):
     seeds_for_promotion_playoff[0].append(Place(place=1, division=2, group=string.ascii_uppercase[g]))
 
-for g in range(8 - int(len(participants_in_divisions[1]) / PLAYERS_PER_GROUP)):
+for g in range(PLAYERS_IN_PROMOTION_PLAYOFF - int(len(participants_in_divisions[1]) / PLAYERS_PER_GROUP)):
     seeds_for_promotion_playoff[1].append(Place(place=g+1, division=2, group="de melhores 2ºs classificados"))
 
 # Jogadores e byes no playoff de promoção
@@ -209,84 +210,69 @@ def adjust_first_round_games(games):
 
     return games
 
-time.sleep(TIME_MULTIPLE * 15)
-os.system("clear")
-print()
+# time.sleep(TIME_MULTIPLE * 15)
+# os.system("clear")
+# print()
 
-print("\x1b[1;33mPLAYOFF DE CAMPEÃO DA 2ª DIVISÃO\n")
+# print("\x1b[1;33mPLAYOFF DE CAMPEÃO DA 2ª DIVISÃO\n")
 
-initial_game_number = 0
-for r in range(amount_of_promotion_playoff_rounds + 1):
-    round_title = "\x1b[1;37mRonda {}".format(r + 1)
-    if r == 0:
-        game_round = create_game_round(all_players_in_promotion_playoff, initial_game_number)
-        adjust_first_round_games(game_round)
-    elif r == amount_of_promotion_playoff_rounds - 1:
-        round_title = "\x1b[1;37mApuramento do 3º Lugar"
-        game_round = create_game_round(promotion_playoff_games[r-1].copy(), initial_game_number, False)
-    else:
-        game_round = create_game_round(promotion_playoff_games[r-1].copy(), initial_game_number)
-        if r == amount_of_promotion_playoff_rounds:
-            round_title = "\x1b[1;37mFinal"
-            game_round = create_game_round(promotion_playoff_games[r-2].copy(), initial_game_number)
+# initial_game_number = 0
 
-    promotion_playoff_games.append(game_round)
+# game_round = create_game_round(all_players_in_promotion_playoff, initial_game_number)
+# adjust_first_round_games(game_round)
 
-    initial_game_number += len(game_round)
+# for g in game_round:
+#     print("\x1b[0;37m{}".format(g))
+# print()
 
-    print(round_title)
-    for g in game_round:
-        print("\x1b[0;37m{}".format(g))
-    print()
+# time.sleep(TIME_MULTIPLE * 15 * DEBUGGING_TIME_MULTIPLE)
+# os.system("clear")
+# print()
 
-time.sleep(TIME_MULTIPLE * 15)
-os.system("clear")
-print()
+# # Todos os jogadores no playoff de Campeão
 
-# Todos os jogadores no playoff de Campeão
+# print("\x1b[1;33mPLAYOFF DE CAMPEÃO\n")
 
-print("\x1b[1;33mPLAYOFF DE CAMPEÃO\n")
+# all_players_in_champion_playoff = []
 
-all_players_in_champion_playoff = []
+# for i in range(2):
+#     for g in range(int(len(participants_in_divisions[0]) / PLAYERS_PER_GROUP)):
+#         all_players_in_champion_playoff.append(Place(place=i + 1, division=1, group=string.ascii_uppercase[g]))
 
-for i in range(2):
-    for g in range(int(len(participants_in_divisions[0]) / PLAYERS_PER_GROUP)):
-        all_players_in_champion_playoff.append(Place(place=i + 1, division=1, group=string.ascii_uppercase[g]))
+# # Criação dos jogos do Playoff de Subida
 
-# Criação dos jogos do Playoff de Subida
+# champion_playoff_games = []
 
-champion_playoff_games = []
+# amount_of_champion_playoff_rounds = 3
 
-amount_of_champion_playoff_rounds = 3
+# initial_game_number = 0
+# for r in range(amount_of_champion_playoff_rounds):
+#     if r == 0:
+#         print("\x1b[1;37mMeias finais")
+#         game_round = create_game_round(all_players_in_champion_playoff, initial_game_number)
+#     elif r == 1:
+#         print("\x1b[1;37mApuramento do 3º Lugar")
+#         game_round = create_game_round(champion_playoff_games[r-1].copy(), initial_game_number, False)
+#     elif r == 2:
+#         print("\x1b[1;37mFinal")
+#         game_round = create_game_round(champion_playoff_games[r-2].copy(), initial_game_number)
 
-initial_game_number = 0
-for r in range(amount_of_champion_playoff_rounds):
-    if r == 0:
-        print("\x1b[1;37mMeias finais")
-        game_round = create_game_round(all_players_in_champion_playoff, initial_game_number)
-    elif r == 1:
-        print("\x1b[1;37mApuramento do 3º Lugar")
-        game_round = create_game_round(champion_playoff_games[r-1].copy(), initial_game_number, False)
-    elif r == 2:
-        print("\x1b[1;37mFinal")
-        game_round = create_game_round(champion_playoff_games[r-2].copy(), initial_game_number)
+#     champion_playoff_games.append(game_round)
 
-    champion_playoff_games.append(game_round)
+#     initial_game_number += len(game_round)
 
-    initial_game_number += len(game_round)
+#     for g in game_round:
+#         print("\x1b[0;37m{}".format(g))
+#     print()
 
-    for g in game_round:
-        print("\x1b[0;37m{}".format(g))
-    print()
+# # Jogo de manutenção na 1ª Divisão
 
-# Jogo de manutenção na 1ª Divisão
+# print("\x1b[1;33mJOGO DE MANUTENÇÃO NA 1ª DIVISÃO\n")
 
-print("\x1b[1;33mJOGO DE MANUTENÇÃO NA 1ª DIVISÃO\n")
-
-maintenance_match = []
-for g in range(2):
-    maintenance_match.append(Place(place=3, division=1, group=string.ascii_uppercase[g]))
-print("\x1b[0;37m{} x {}".format(maintenance_match[0], maintenance_match[1]))
+# maintenance_match = []
+# for g in range(2):
+#     maintenance_match.append(Place(place=3, division=1, group=string.ascii_uppercase[g]))
+# print("\x1b[0;37m{} x {}".format(maintenance_match[0], maintenance_match[1]))
 
 # groups, promotion_playoff_games, champion_playoff_games
 
