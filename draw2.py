@@ -4,7 +4,7 @@
 # Variaveis globais e classes
 import math, random, string, time, os, csv
 
-TIME_MULTIPLE = 0.1
+TIME_MULTIPLE = 1
 DEBUGGING_TIME_MULTIPLE = 100
 
 PLAYERS_PER_GROUP = 3
@@ -63,10 +63,15 @@ os.system("clear")
 print()
 print("\x1b[1;33mLISTA DE PARTICIPANTES")
 print()
+print("1ª DIVISÃO")
 print("\x1b[1;37mRanking\t Nome")
-for p in participants:
+for p in filter(lambda x: x.current_division == 1, participants):
     print("\x1b[0;37m{}\t {}".format(p.ranking, p))
-
+print()
+print("\x1b[1;33m2ª DIVISÃO")
+print("\x1b[1;37mRanking\t Nome")
+for p in filter(lambda x: x.current_division == 2, participants):
+    print("\x1b[0;37m{}\t {}".format(p.ranking, p))
 
 time.sleep(TIME_MULTIPLE * 10)
 
@@ -96,7 +101,7 @@ if len(same_ranking) > 0:
             print("\x1b[0;37m{}\t {}".format(p.ranking, p))
         print()
 
-    time.sleep(TIME_MULTIPLE * 10)
+    time.sleep(TIME_MULTIPLE * len(same_ranking) * 2)
     print("\x1b[1;37mSORTEIO:")
     print()
     for sr in same_ranking:
@@ -106,7 +111,7 @@ if len(same_ranking) > 0:
             print("\x1b[0;37m{}\t {}".format(p.ranking, p))
         print()
 
-    time.sleep(TIME_MULTIPLE * 10)
+    time.sleep(TIME_MULTIPLE * len(same_ranking) * 2)
 
 
 for p in participants:
